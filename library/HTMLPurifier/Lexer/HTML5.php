@@ -59,7 +59,12 @@ class HTMLPurifier_Lexer_HTML5 extends HTMLPurifier_Lexer_DOMLex
         if ($config->get('Core.AggressivelyFixLt')) {
             $char = '[^a-z!\/]';
             $comment = "/<!--(.*?)(-->|\z)/is";
-            $html = preg_replace_callback($comment, array($this, 'callbackArmorCommentEntities'), $html);
+            $val = preg_replace_callback($comment, array($this, 'callbackArmorCommentEntities'), $html);
+            if ($val === null) {
+                return $html;
+            }
+
+            $html = $val;
 
             do {
                 $old = $html;
